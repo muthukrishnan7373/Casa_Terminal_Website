@@ -135,13 +135,8 @@ const Navbar = () => {
               whileTap={{ scale: 0.95 }}
             >
               <div className="relative">
-                <img
-                  src="./public/logo.jpg"
-                  alt="Casa Terminal Logo"
-                  className="w-12 h-12 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-[#502d13] to-[#7b4a26] flex items-center justify-center shadow-lg overflow-hidden border-2 border-[#e9ddc8]/20"
-                />
-
-                <motion.div
+                <img src="./public/logo.jpg" alt="Casa Terminal Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg" />
+                 <motion.div
                   className="absolute inset-0 rounded-xl border-2 border-[#e9ddc8]"
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileHover={{ opacity: 1, scale: 1.1 }}
