@@ -1,12 +1,12 @@
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { ArrowRight, ChevronDown, Play, Award, Truck, HardHat, Users } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowRight, ChevronDown, Truck, HardHat, Users, Award } from "lucide-react";
 import heroImage from "@/assets/hero-construction.jpg";
 
 const HeroSection = () => {
   const containerRef = useRef(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -16,41 +16,53 @@ const HeroSection = () => {
   // Parallax effects
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
 
-  // Mouse move effect for 3D tilt
+  // Update dimensions on resize
+  useEffect(() => {
+    const updateDimensions = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+    
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
+  // Mouse move effect for 3D tilt (disabled on mobile)
   const handleMouseMove = (e: React.MouseEvent) => {
+    if (dimensions.width < 768) return; // Disable on mobile
+    
     const { clientX, clientY } = e;
     const { innerWidth, innerHeight } = window;
     setMousePosition({
-      x: (clientX - innerWidth / 1) / 50,
-      y: (clientY - innerHeight / 1) / 50,
+      x: (clientX - innerWidth / 2) / 30,
+      y: (clientY - innerHeight / 2) / 30,
     });
   };
 
-  // Rotating words
-  const rotatingWords = [];
-  
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentWordIndex((prev) => (prev + 1) % rotatingWords.length);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
+  // Service icons data for floating animation
+  const serviceIcons = [
+    { Icon: Truck, delay: 0, position: { top: '10%', right: '5%' } },
+    { Icon: HardHat, delay: 0.5, position: { top: '30%', right: '15%' } },
+    { Icon: Users, delay: 1, position: { top: '50%', right: '8%' } },
+    { Icon: Award, delay: 1.5, position: { top: '70%', right: '12%' } },
+  ];
 
   return (
     <section 
       ref={containerRef} 
       onMouseMove={handleMouseMove}
-      className="relative h-screen overflow-hidden bg-[#b57646] "
+      className="relative h-screen overflow-hidden bg-gradient-to-b from-[#502d13] to-[#7b4a26]"
     >
       {/* Parallax Background with 3D Effect */}
       <motion.div 
         style={{ 
           y, 
-          scale,
-          rotateX: mousePosition.y,
-          rotateY: mousePosition.x,
+          rotateX: dimensions.width >= 768 ? mousePosition.y : 0,
+          rotateY: dimensions.width >= 768 ? mousePosition.x : 0,
         }} 
         className="absolute inset-0 transform-gpu"
       >
@@ -60,19 +72,19 @@ const HeroSection = () => {
           className="w-full h-full object-cover"
         />
         {/* Enhanced gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#502d13] via-[#502d13]/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#502d13] via-[#502d13]/90 to-[#502d13]/70" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#502d13] via-transparent to-transparent" />
       </motion.div>
 
-      {/* Animated floating particles */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(30)].map((_, i) => (
+      {/* Animated floating particles - reduced on mobile */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(dimensions.width < 768 ? 10 : 30)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-[#e9ddc8]/20 rounded-full"
             initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: Math.random() * (dimensions.width || 1000),
+              y: Math.random() * (dimensions.height || 1000),
             }}
             animate={{
               y: [null, -100],
@@ -89,91 +101,84 @@ const HeroSection = () => {
         ))}
       </div>
 
-      {/* Animated geometric shapes */}
-      <div className="absolute inset-0">
-        {[...Array(5)].map((_, i) => (
+      {/* Floating service icons - hidden on mobile */}
+      <div className="absolute inset-0 pointer-events-none hidden lg:block">
+        {serviceIcons.map(({ Icon, delay, position }, i) => (
           <motion.div
-            key={`shape-${i}`}
-            className="absolute border border-[#e9ddc8]/10"
-            style={{
-              width: Math.random() * 300 + 100,
-              height: Math.random() * 300 + 100,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              rotate: Math.random() * 360,
-            }}
-            animate={{
-              rotate: [null, 360],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: Math.random() * 20 + 20,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-          />
+            key={i}
+            className="absolute"
+            style={position}
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1 + delay, duration: 0.5 }}
+          >
+            <motion.div
+              animate={{
+                y: [0, -20, 0],
+                rotate: [0, 10, -10, 0],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                delay: delay,
+              }}
+            >
+              <div className="w-16 h-16 bg-[#e9ddc8]/10 backdrop-blur-sm border border-[#e9ddc8]/20 rounded-2xl flex items-center justify-center">
+                <Icon className="w-8 h-8 text-[#e9ddc8]" />
+              </div>
+            </motion.div>
+          </motion.div>
         ))}
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
-        <div className="max-w-4xl">
-          {/* Premium Badge with Glow Effect */}
-          <motion.div
-            initial={{ opacity: 0, x: -50, scale: 0.8 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative inline-block mb-8"
-          >
-            <motion.div
-              className="absolute inset-0 bg-[#e9ddc8]/20 blur-xl rounded-full"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-            
-          </motion.div>
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+        <div className="w-full max-w-5xl mx-auto">
+         
 
-          {/* Dynamic Main Heading with Rotating Words */}
+          {/* Main Heading - Responsive text sizes */}
           <motion.h1
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className="font-display font-bold text-6xl md:text-7xl lg:text-8xl text-[#e9ddc8] leading-[0.9] mb-6"
+            className="text-center lg:text-left"
           >
-            <motion.span
-              key={currentWordIndex}
-              initial={{ opacity: 0, y: 50 }}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ duration: 0.5 }}
-              className="mt-6 justify-center flex items-center gap-2 text-[#e9ddc8] font-display font-bold text-6xl md:text-6xl bg-gradient-to-r from-[#e9ddc8] to-[#d4c4a8] bg-clip-text text-transparent"
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-display font-bold text-[#e9ddc8] leading-tight"
             >
-              {rotatingWords[currentWordIndex]}
-            </motion.span>
-            {" India’s,".split(" ").map((word, i) => (
-              <motion.span
-                key={i}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: i * 0.2 + 0.4 }}
-                className=" pl-14 gap-2 text-[#e9ddc8] font-display font-bold text-8xl md:text-8xl bg-gradient-to-r from-[#e9ddc8] to-[#d4c4a8] bg-clip-text text-transparent"
-              >
-                {word}
-              </motion.span>
-            ))}
-           <br />
-            <span className="relative pt-8 pb-4">
-              <motion.span
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 1 }}
-                className="text-[#e9ddc8] justify-center flex items-center gap-2 mt-2 font-display font-bold text-7xl md:text-7xl bg-gradient-to-r from-[#e9ddc8] to-[#d4c4a8] bg-clip-text text-transparent"
-              >
-                Construction
-                <br></br>
+              India's
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-display font-bold text-[#e9ddc8] leading-tight mt-2"
+            >
+              Construction
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="relative inline-block"
+            >
+              <span className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-display font-bold bg-gradient-to-r from-[#e9ddc8] to-[#d4c4a8] bg-clip-text text-transparent">
                 Marketplace
-              </motion.span>
+              </span>
               
-              
+              {/* Animated underline - hidden on mobile */}
+              <motion.svg
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.8, delay: 1 }}
+                className="absolute -bottom-7 left-0 w-full hidden md:block "
+                viewBox="0 0 400 20"
+                fill="none"
+              >
                 <motion.path
                   d="M2 15C80 7 180 3 398 15"
                   stroke="#e9ddc8"
@@ -183,167 +188,86 @@ const HeroSection = () => {
                   animate={{ strokeDashoffset: [0, 10] }}
                   transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                 />
-              
-            </span>
+              </motion.svg>
+            </motion.div>
           </motion.h1>
 
-          {/* Enhanced Description with Typing Effect */}
+          {/* Description */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.4 }}
-            className="relative"
+            transition={{ duration: 0.6, delay: 1.2 }}
+            className="relative mt-6 md:mt-8"
           >
             <motion.p
-              className="text-[#e9ddc8]/80 text-lg md:text-xl max-w-2xl justify-center pl-28"
               animate={{ y: [0, -5, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="text-[#e9ddc8]/80 text-base sm:text-lg ml-6 text-center lg:text-left max-w-2xl mx-auto lg:mx-0 leading-relaxed pl-20"
             >
-             Rental Transport• Contractors • Materials Remove active members, cities covered, orders delivered
+              Transport • Rental • Contractors • Materials
             </motion.p>
-            
-            {/* Floating service icons */}
-            <div className="absolute -right-60 -top-20 hidden lg:block pl-28">
-              {[Truck, HardHat, Users, Award].map((Icon, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute"
-                  style={{
-                    right: i * 80,
-                    top: i * 60,
-                  }}
-                  animate={{
-                    y: [0, -20, 0],
-                    rotate: [0, 10, -10, 0],
-                  }}
-                  transition={{
-                    duration: 3 + i,
-                    repeat: Infinity,
-                    delay: i * 0.5,
-                  }}
-                >
-                  <div className="w-12 h-12 bg-[#e9ddc8]/10 backdrop-blur-sm border border-[#e9ddc8]/20 rounded-xl flex items-center justify-center">
-                    <Icon className="w-6 h-6 text-[#e9ddc8]" />
-                  </div>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
 
-          {/* Enhanced CTA Buttons */}
+          {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.6 }}
-            className="flex flex-col sm:flex-row gap-4 items-center pl-28 mt-3"
+            transition={{ duration: 0.6, delay: 1.4 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-8 md:mt-10"
           >
             <motion.a
               href="#services"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative bg-[#e9ddc8] text-[#502d13] px-10 py-4 rounded-xl font-display font-semibold text-lg overflow-hidden"
+              className="group bg-[#e9ddc8] text-[#502d13] px-8 md:px-10 py-3 md:py-4 rounded-xl font-display font-semibold text-base md:text-lg hover:shadow-2xl hover:shadow-[#e9ddc8]/30 transition-all duration-300 flex items-center gap-2 justify-center"
             >
-             
-              <span className="relative flex items-center gap-2 ">
-                Explore Services
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </span>
-            </motion.a> 
+              Explore Services
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
+            </motion.a>
           </motion.div>
 
-          {/* Enhanced Stats with Progress Bars */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.8 }}
-            className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-6 pl-20"
-          >
-            {[
-              {  label: "Vendors", progress: 85 },
-              {  label: "Cities", progress: 70 },
-              {  label: "Projects", progress: 95 },
-              { label: "Support", progress: 100 },
-            ].map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 2 + i * 0.1, type: "spring" }}
-                className="text-center group"
-              >
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  className="relative"
-                >
-                  <div className="text-2xl md:text-3xl font-display font-bold text-[#e9ddc8] ">
-                    {stat.label === "Support" ? "24/7" : stat.progress + "%"}
-                  </div>
-                  <div className="text-[#e9ddc8]/50 text-sm mt-1">{stat.label}</div>
-                  
-                  {/* Progress bar that fills on hover */}
-                  <motion.div
-                    className="absolute -bottom-4 left-0 h-0.5 bg-[#e9ddc8]/30 rounded-full overflow-hidden"
-                    initial={{ width: 0 }}
-                    whileHover={{ width: "100%" }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <motion.div
-                      className="h-full bg-[#e9ddc8]"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${stat.progress}%` }}
-                      transition={{ delay: 2.5 + i * 0.1, duration: 1 }}
-                    />
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-            ))}
-          </motion.div>
+          
         </div>
       </div>
 
-      {/* Enhanced Scroll Indicator */}
+      {/* Scroll Indicator */}
       <motion.div
         style={{ opacity }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2"
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center gap-2 group cursor-pointer"
+          className="flex flex-col items-center gap-1 md:gap-2 group cursor-pointer"
           onClick={() => {
             document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
           }}
         >
-          <span className="text-[#e9ddc8]/40 text-xs uppercase tracking-widest group-hover:text-[#e9ddc8] transition-colors">
+          <span className="text-[#e9ddc8]/40 text-[10px] md:text-xs uppercase tracking-widest group-hover:text-[#e9ddc8] transition-colors">
             Scroll
           </span>
-          <motion.div
-            animate={{ y: [0, 5, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
-          >
-            <ChevronDown className="w-5 h-5 text-[#e9ddc8]/60 group-hover:text-[#e9ddc8] transition-colors" />
-          </motion.div>
+          <ChevronDown className="w-4 h-4 md:w-5 md:h-5 text-[#e9ddc8]/60 group-hover:text-[#e9ddc8] transition-colors" />
           
-          {/* Pulsing ring */}
+          {/* Pulsing ring - hidden on mobile */}
           <motion.div
-            className="absolute -inset-4 border border-[#e9ddc8]/20 rounded-full"
+            className="absolute -inset-4 border border-[#e9ddc8]/20 rounded-full hidden md:block"
             animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
             transition={{ duration: 2, repeat: Infinity }}
           />
         </motion.div>
       </motion.div>
 
-      {/* Quick Action Floating Button */}
+      {/* Back to Top Button - adjusted for mobile */}
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        transition={{ delay: 2.5, type: "spring" }}
+        transition={{ delay: 2, type: "spring" }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        className="fixed bottom-8 right-8 z-50 bg-[#e9ddc8] text-[#502d13] p-4 rounded-full shadow-2xl hover:shadow-[#e9ddc8]/30 transition-all duration-300 group hidden lg:block"
+        className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 bg-[#e9ddc8] text-[#502d13] p-3 md:p-4 rounded-full shadow-2xl hover:shadow-[#e9ddc8]/30 transition-all duration-300 group"
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       >
-        <ArrowRight className="w-6 h-6 rotate-[-90deg] group-hover:translate-y-1 transition-transform" />
+        <ArrowRight className="w-4 h-4 md:w-6 md:h-6 rotate-[-90deg] group-hover:translate-y-1 transition-transform" />
       </motion.button>
     </section>
   );
