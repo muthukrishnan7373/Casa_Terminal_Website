@@ -1,12 +1,13 @@
 import { motion } from "framer-motion";
-import logo from "../public/Logo.jpg";
 import { 
   MapPin, Phone, Mail, MessageCircle, 
   Facebook, Twitter, Instagram, Linkedin, 
   Send, ArrowUp, ChevronRight 
 } from "lucide-react";
 import { useState, useEffect } from "react";
-
+// Option 1: If logo is in public folder, no import needed
+// Option 2: If logo is in src/assets, uncomment below:
+import logo from "@/assets/Logo.jpg";
 
 const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -48,14 +49,14 @@ const Footer = () => {
 
   const contactInfo = [
     { Icon: MapPin, text: "Chennai, Tamil Nadu, India" },
-    { Icon: Phone, text: "+91 xxxxx xxxxx", href: "tel:+91 xxxxx xxxxx" },
-    { Icon: MessageCircle, text: "+91 xxxxx xxxxx", href: "tel:+91 xxxxx xxxxx" },
+    { Icon: Phone, text: "+91 xxxxx xxxxx", href: "tel:+91xxxxx xxxxx" },
+    { Icon: MessageCircle, text: "+91 xxxxx xxxxx", href: "tel:+91xxxxx xxxxx" },
     { Icon: Mail, text: "xxxxxx@casaterminal.com", href: "mailto:contact@casaterminal.com" }
   ];
 
   return (
     <footer id="contact" className="bg-[#502d13] text-[#e9ddc8] relative overflow-hidden">
-      {/* Decorative Pattern - responsive opacity */}
+      {/* Decorative Pattern */}
       <div className="absolute inset-0 opacity-5 md:opacity-10">
         <div className="absolute top-0 left-0 w-full h-full bg-repeat" 
           style={{ 
@@ -65,7 +66,7 @@ const Footer = () => {
         />
       </div>
 
-      {/* Newsletter Section - responsive */}
+      {/* Newsletter Section */}
       <div className="relative z-10 border-b border-[#e9ddc8]/10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
           <div className="max-w-3xl mx-auto text-center">
@@ -110,15 +111,32 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Main Footer Content - responsive grid */}
+      {/* Main Footer Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16 relative z-10">
-        {/* Mobile: Accordion Layout, Desktop: Grid Layout */}
+        {/* Mobile: Accordion Layout */}
         <div className="lg:hidden space-y-4">
-          {/* Company Info - Always visible on mobile */}
+          {/* Company Info - Mobile */}
           <div className="mb-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg">
-               <img src={logo} alt="Casa Terminal Logo" className="w-12 h-12 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg" />
+              <div className="w-12 h-12 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg overflow-hidden">
+                {/* FIXED: Logo for mobile */}
+                <img 
+                  src={logo} 
+                  alt="Casa Terminal Logo" 
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Fallback if image doesn't load
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const parent = target.parentElement;
+                    if (parent) {
+                      const fallback = document.createElement('span');
+                      fallback.className = 'text-[#502d13] font-display font-bold text-xl';
+                      fallback.textContent = 'CT';
+                      parent.appendChild(fallback);
+                    }
+                  }}
+                />
               </div>
               <span className="font-display font-bold text-xl text-[#e9ddc8]">CASA TERMINAL</span>
             </div>
@@ -126,7 +144,7 @@ const Footer = () => {
               India's premier construction marketplace connecting builders, suppliers, and contractors.
             </p>
             
-            {/* Social Links - Horizontal scroll on mobile */}
+            {/* Social Links */}
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {socialLinks.map(({ Icon, href, label }) => (
                 <motion.a
@@ -143,7 +161,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Accordion Sections for Mobile */}
+          {/* Accordion Sections */}
           {footerSections.map((section) => (
             <div key={section.title} className="border border-[#e9ddc8]/10 rounded-lg overflow-hidden">
               <button
@@ -185,7 +203,7 @@ const Footer = () => {
             </div>
           ))}
 
-          {/* Contact Info - Always visible on mobile */}
+          {/* Contact Info */}
           <div className="mt-6 p-4 bg-[#e9ddc8]/5 rounded-lg">
             <h4 className="font-display font-bold text-base mb-4">Get in Touch</h4>
             <div className="space-y-3 text-[#e9ddc8]/60">
@@ -205,13 +223,30 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Desktop Grid Layout - lg and above */}
+        {/* Desktop Grid Layout */}
         <div className="hidden lg:grid lg:grid-cols-4 gap-8 xl:gap-10">
-          {/* Company Info */}
+          {/* Company Info - Desktop */}
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg">
-                <img src="./public/logo.jpg" alt="Casa Terminal Logo" className="w-12 h-12 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg" />
+              <div className="w-12 h-12 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg overflow-hidden">
+                {/* FIXED: Logo for desktop */}
+                <img 
+                  src={logo} 
+                  alt="Casa Terminal Logo" 
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Fallback if image doesn't load
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    const parent = target.parentElement;
+                    if (parent) {
+                      const fallback = document.createElement('span');
+                      fallback.className = 'text-[#502d13] font-display font-bold text-xl';
+                      fallback.textContent = 'CT';
+                      parent.appendChild(fallback);
+                    }
+                  }}
+                />
               </div>
               <span className="font-display font-bold text-xl text-[#e9ddc8]">CASA TERMINAL</span>
             </div>
@@ -304,7 +339,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar - responsive */}
+      {/* Bottom Bar */}
       <div className="border-t border-[#e9ddc8]/10 relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-5">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-center sm:text-left">
@@ -327,7 +362,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Scroll to Top Button - responsive */}
+      {/* Scroll to Top Button */}
       <motion.button
         initial={{ scale: 0, opacity: 0 }}
         animate={{ 
@@ -342,7 +377,7 @@ const Footer = () => {
         <ArrowUp className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-y-1 transition-transform" />
       </motion.button>
 
-      {/* Mobile Bottom Navigation - visible only on small devices */}
+      {/* Mobile Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-[#502d13] border-t border-[#e9ddc8]/10 py-2 px-4 flex justify-around items-center z-40 md:hidden">
         {[
           { icon: MapPin, label: "Visit", href: "#" },
@@ -361,8 +396,8 @@ const Footer = () => {
         ))}
       </div>
 
-      {/* Add bottom padding on mobile to account for bottom nav */}
-      <style >{`
+      {/* Add bottom padding on mobile */}
+      <style>{`
         @media (max-width: 768px) {
           body {
             padding-bottom: 64px;

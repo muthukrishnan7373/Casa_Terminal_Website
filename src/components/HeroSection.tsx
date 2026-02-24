@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ChevronDown, Truck, HardHat, Users, Award } from "lucide-react";
 import heroImage from "@/assets/hero-construction.jpg";
 
+
 const HeroSection = () => {
   const containerRef = useRef(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });

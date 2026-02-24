@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "../public/Logo.jpg";
+// Remove this incorrect import
+import logo from "@/assets/Logo.jpg";
 import {
   Menu,
   X,
@@ -128,16 +129,35 @@ const Navbar = () => {
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
-            {/* Logo - responsive sizing */}
+            {/* Logo - fixed version */}
             <motion.a
-              href="/"
+              href={logo}
               className="flex items-center gap-2 md:gap-3 group"
               whileHover={{ scale: windowWidth >= 768 ? 1.05 : 1 }}
               whileTap={{ scale: 0.95 }}
             >
               <div className="relative">
-                <img src={logo} alt="Casa Terminal Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg" />
-                 <motion.div
+                {/* FIXED: Correct way to display logo */}
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg overflow-hidden">
+                  <img 
+                    src={logo}
+                    alt="Casa Terminal Logo" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback if image doesn't load
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        const fallback = document.createElement('span');
+                        fallback.className = 'text-[#502d13] font-display font-bold text-lg';
+                        fallback.textContent = 'CT';
+                        parent.appendChild(fallback);
+                      }
+                    }}
+                  />
+                </div>
+                <motion.div
                   className="absolute inset-0 rounded-xl border-2 border-[#e9ddc8]"
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileHover={{ opacity: 1, scale: 1.1 }}
@@ -145,16 +165,15 @@ const Navbar = () => {
                 />
               </div>
 
-              {/* Text logo with your span */}
+              {/* Text logo */}
               <div className="flex flex-col">
                 <span className="text-[#e9ddc8] font-display font-bold text-lg md:text-2xl lg:text-3xl leading-tight">
                   CASA TERMINAL
                 </span>
-               
               </div>
             </motion.a>
 
-            {/* Desktop Navigation - lg and above */}
+            {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
                 <div
@@ -186,7 +205,7 @@ const Navbar = () => {
                     />
                   </motion.a>
 
-                  {/* Mega Menu - Desktop */}
+                  {/* Mega Menu */}
                   <AnimatePresence>
                     {link.megaMenu &&
                       activeMegaMenu === link.label &&
@@ -227,9 +246,8 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Action Icons - responsive */}
+            {/* Action Icons */}
             <div className="flex items-center gap-1 md:gap-2">
-              {/* Search - visible on all devices */}
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
@@ -240,7 +258,6 @@ const Navbar = () => {
                 <Search className="w-4 h-4 md:w-5 md:h-5" />
               </motion.button>
 
-              {/* User - hidden on mobile */}
               <motion.a
                 href="#"
                 whileHover={{ scale: 1.1 }}
@@ -251,7 +268,6 @@ const Navbar = () => {
                 <User className="w-4 h-4 md:w-5 md:h-5" />
               </motion.a>
 
-              {/* Cart - visible on all devices */}
               <motion.a
                 href="#"
                 whileHover={{ scale: 1.1 }}
@@ -265,7 +281,6 @@ const Navbar = () => {
                 </span>
               </motion.a>
 
-              {/* Get Quote - hidden on mobile, visible on tablet and up */}
               <motion.a
                 href="#quote"
                 whileHover={{ scale: 1.05 }}
@@ -275,7 +290,6 @@ const Navbar = () => {
                 Get Quote
               </motion.a>
 
-              {/* Mobile Menu Button */}
               <button
                 className="lg:hidden p-2 rounded-lg text-[#e9ddc8] hover:bg-[#e9ddc8]/10 transition-colors ml-1"
                 onClick={() => setIsOpen(!isOpen)}
@@ -291,7 +305,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu - Slide from right */}
+        {/* Mobile Menu */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -371,9 +385,6 @@ const Navbar = () => {
                     </div>
                   ))}
 
-                 
-                 
-
                   {/* Mobile action buttons */}
                   <div className="mt-6 grid grid-cols-2 gap-3">
                     <a
@@ -398,7 +409,7 @@ const Navbar = () => {
         </AnimatePresence>
       </motion.nav>
 
-      {/* Search Modal - responsive */}
+      {/* Search Modal */}
       <AnimatePresence>
         {showSearch && (
           <motion.div
@@ -433,7 +444,6 @@ const Navbar = () => {
                   </button>
                 </div>
 
-                {/* Quick search suggestions - hidden on mobile */}
                 <div className="hidden sm:block px-4 pb-4">
                   <p className="text-[#502d13]/50 text-xs mb-2">
                     Popular searches:
@@ -465,7 +475,6 @@ const Navbar = () => {
         )}
       </AnimatePresence>
 
-      {/* Overlay for mobile menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
