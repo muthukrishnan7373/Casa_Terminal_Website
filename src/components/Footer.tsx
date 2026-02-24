@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
+import logo from "../public/Logo.jpg";
 import { 
   MapPin, Phone, Mail, MessageCircle, 
   Facebook, Twitter, Instagram, Linkedin, 
   Send, ArrowUp, ChevronRight 
 } from "lucide-react";
 import { useState, useEffect } from "react";
+
 
 const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -116,7 +118,7 @@ const Footer = () => {
           <div className="mb-6">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg">
-                <span className="text-[#502d13] font-display font-bold text-xl">CT</span>
+               <img src={logo} alt="Casa Terminal Logo" className="w-12 h-12 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg" />
               </div>
               <span className="font-display font-bold text-xl text-[#e9ddc8]">CASA TERMINAL</span>
             </div>

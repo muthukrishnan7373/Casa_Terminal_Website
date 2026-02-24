@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "../public/Logo.jpg";
 import {
   Menu,
   X,
@@ -135,7 +136,7 @@ const Navbar = () => {
               whileTap={{ scale: 0.95 }}
             >
               <div className="relative">
-                <img src="./public/logo.jpg" alt="Casa Terminal Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg" />
+                <img src={logo} alt="Casa Terminal Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg" />
                  <motion.div
                   className="absolute inset-0 rounded-xl border-2 border-[#e9ddc8]"
                   initial={{ opacity: 0, scale: 0.8 }}
