@@ -36,14 +36,14 @@
 
     --radius: 0.75rem;
 
-    --copper: 25 80% 45%;
-    --copper-foreground: 38 42% 95%;
-    --gold: 40 70% 50%;
-    --gold-foreground: 26 62% 12%;
-    --earth: 20 45% 30%;
-    --earth-foreground: 38 42% 92%;
-    --sand-light: 38 50% 95%;
-    --sand-dark: 30 30% 60%;
+    --brown-dark: #502d13;
+  --brown-medium: #7b4a26;
+  --brown-light: #a67b5b;
+  --sandal: #e9ddc8;
+  --sandal-dark: #d4c4a8;
+  --cream: #f5efe4;
+  --white: #ffffff;
+  --black: #1a1a1a;
 
     --sidebar-background: 26 62% 15%;
     --sidebar-foreground: 38 42% 90%;
