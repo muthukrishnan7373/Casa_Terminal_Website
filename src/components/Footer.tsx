@@ -5,7 +5,7 @@ import {
   Send, ArrowUp, ChevronRight 
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import logo from "@/assets/Logo.svg";
+import logo from "@/assets/logo.svg";
 
 const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
