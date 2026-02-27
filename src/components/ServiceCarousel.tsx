@@ -51,7 +51,8 @@ const services = [
   {
     title: "Architects",
     category: "Services",
-    image: "https://images.unsplash.com/photo-1503387762-592deb58ef4f?w=500",
+    image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500",
+   
     price: "Custom",
     rating: 4.9,
     delivery: "Flexible",

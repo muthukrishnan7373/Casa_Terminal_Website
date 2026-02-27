@@ -133,7 +133,7 @@ const HeroSection = () => {
           className="w-full h-full object-cover"
         />
         {/* Enhanced gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#502d13] via-[#502d13]/40 to-[#502d13]/60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#502d13] via-[#502d13]/20 to-[#502d13]/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#502d13] via-transparent to-transparent" />
       </motion.div>
 

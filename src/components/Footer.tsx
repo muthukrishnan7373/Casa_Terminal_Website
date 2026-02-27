@@ -64,51 +64,7 @@ const Footer = () => {
         />
       </div>
 
-      {/* Newsletter Section */}
-      <div className="relative z-10 border-b border-[#e9ddc8]/10">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-          <div className="max-w-3xl mx-auto text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true, margin: "-50px" }}
-            >
-              <h3 className="text-xl sm:text-2xl md:text-3xl font-display font-bold mb-2 md:mb-4 px-4">
-                Stay Updated with Latest Construction Trends
-              </h3>
-              <p className="text-[#e9ddc8]/60 text-sm sm:text-base mb-4 md:mb-6 px-4">
-                Subscribe to get updates on new materials, equipment, and industry insights
-              </p>
-            </motion.div>
-            
-            <motion.form
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto px-4"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 bg-[#e9ddc8]/10 border border-[#e9ddc8]/20 rounded-xl text-[#e9ddc8] placeholder-[#e9ddc8]/50 focus:outline-none focus:border-[#e9ddc8] transition-colors text-sm sm:text-base"
-                aria-label="Email for newsletter"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 bg-[#e9ddc8] text-[#502d13] rounded-xl font-semibold hover:bg-[#d4c4a8] transition-colors flex items-center justify-center gap-2 group text-sm sm:text-base"
-              >
-                <span className="hidden xs:inline">Subscribe</span>
-                <span className="xs:hidden">Join</span>
-                <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </motion.form>
-          </div>
-        </div>
-      </div>
-
+      
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16 relative z-10">
         {/* Mobile: Accordion Layout */}
