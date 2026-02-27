@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
-import { Package, Truck, HardHat, Wrench, ArrowRight, Sparkles, ChevronRight } from "lucide-react";
+import { Package, HardHat, Wrench, ArrowRight, Sparkles, ChevronRight } from "lucide-react";
 
 const coreServices = [
   {
@@ -10,14 +10,6 @@ const coreServices = [
     features: ["50+ Brands", "Quality Guaranteed", "Bulk Discounts"],
     color: "from-amber-600 to-orange-600",
     bgImage: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=500",
-  },
-  {
-    icon: Truck,
-    title: "Transport",
-    description: "Fast, reliable logistics with real-time tracking for your construction materials.",
-    features: ["Real-time Tracking", "Insurance Covered", "Pan-India Network"],
-    color: "from-blue-600 to-cyan-600",
-    bgImage: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=500",
   },
   {
     icon: Wrench,
@@ -48,7 +40,6 @@ const CoreServices = () => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -68,14 +59,14 @@ const CoreServices = () => {
       ref={ref} 
       className="py-16 md:py-20 lg:py-24 bg-[#e9ddc8] relative overflow-hidden"
     >
-      {/* Background Pattern - responsive blur */}
+      {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 left-0 w-48 md:w-72 lg:w-96 h-48 md:h-72 lg:h-96 bg-[#502d13] rounded-full blur-2xl md:blur-3xl" />
         <div className="absolute bottom-0 right-0 w-48 md:w-72 lg:w-96 h-48 md:h-72 lg:h-96 bg-[#502d13] rounded-full blur-2xl md:blur-3xl" />
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header - responsive spacing */}
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -100,8 +91,8 @@ const CoreServices = () => {
           </p>
         </motion.div>
 
-        {/* Services Grid - responsive layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
+        {/* Services Grid - 3 cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-6">
           {coreServices.map((service, i) => {
             const Icon = service.icon;
             const isActive = hoveredCard === i || activeCard === i;
@@ -144,26 +135,26 @@ const CoreServices = () => {
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    {/* Icon - responsive sizing */}
+                    {/* Icon */}
                     <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-3 md:mb-4 ${
                       isActive ? 'scale-110' : ''
                     } transition-transform duration-300`}>
                       <Icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />
                     </div>
                     
-                    {/* Title - responsive text */}
+                    {/* Title */}
                     <h3 className="font-display font-bold text-xl sm:text-2xl md:text-2xl lg:text-2xl mb-1 md:mb-2">
                       {service.title}
                     </h3>
                     
-                    {/* Description - hide on very small devices, truncate on mobile */}
+                    {/* Description */}
                     <p className={`text-white/80 text-xs sm:text-sm md:text-sm lg:text-sm mb-3 md:mb-4 ${
                       isMobile && !isActive ? 'line-clamp-2' : ''
                     }`}>
                       {service.description}
                     </p>
                     
-                    {/* Features - collapsible on mobile */}
+                    {/* Features */}
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ 
@@ -181,7 +172,7 @@ const CoreServices = () => {
                       ))}
                     </motion.div>
                     
-                    {/* Learn More - always visible on mobile with chevron */}
+                    {/* Learn More */}
                     <motion.div
                       animate={{ 
                         x: isActive ? (isMobile ? 5 : 10) : 0,
@@ -200,7 +191,7 @@ const CoreServices = () => {
                   </motion.div>
                 </div>
 
-                {/* Shine Effect - disabled on mobile for performance */}
+                {/* Shine Effect */}
                 {!isMobile && (
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
@@ -253,8 +244,6 @@ const CoreServices = () => {
           </a>
         </motion.div>
       </div>
-
-     
     </section>
   );
 };

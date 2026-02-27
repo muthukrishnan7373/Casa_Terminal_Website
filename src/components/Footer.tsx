@@ -5,9 +5,7 @@ import {
   Send, ArrowUp, ChevronRight 
 } from "lucide-react";
 import { useState, useEffect } from "react";
-// Option 1: If logo is in public folder, no import needed
-// Option 2: If logo is in src/assets, uncomment below:
-import logo from "@/assets/Logo.jpg";
+import logo from "@/assets/Logo.svg";
 
 const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -32,7 +30,7 @@ const Footer = () => {
   const footerSections = [
     {
       title: "Quick Links",
-      links: ["About Us", "Services", "Projects", "Vendors", "Careers"]
+      links: ["About Us", "Services", "Vendors", "Careers"]
     },
     {
       title: "Support",
@@ -116,22 +114,21 @@ const Footer = () => {
         {/* Mobile: Accordion Layout */}
         <div className="lg:hidden space-y-4">
           {/* Company Info - Mobile */}
-          <div className="mb-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg overflow-hidden">
-                {/* FIXED: Logo for mobile */}
+          <div className="relative">
+            <div className=" gap-1 ">
+              <div className="w-16 h-16 md:w-16 md:h-16 rounded-xl bg-transparent flex items-center justify-center overflow-hidden">
                 <img 
                   src={logo} 
                   alt="Casa Terminal Logo" 
-                  className="w-full h-full object-cover"
+                  
+                  style={{ mixBlendMode: 'multiply' }}
                   onError={(e) => {
-                    // Fallback if image doesn't load
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
                     const parent = target.parentElement;
                     if (parent) {
                       const fallback = document.createElement('span');
-                      fallback.className = 'text-[#502d13] font-display font-bold text-xl';
+                      fallback.className = 'text-[#e9ddc8] font-display font-bold text-xl';
                       fallback.textContent = 'CT';
                       parent.appendChild(fallback);
                     }
@@ -227,21 +224,20 @@ const Footer = () => {
         <div className="hidden lg:grid lg:grid-cols-4 gap-8 xl:gap-10">
           {/* Company Info - Desktop */}
           <div>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg overflow-hidden">
-                {/* FIXED: Logo for desktop */}
+            <div className="flex items-center  mb-6">
+              <div className="w-20 h-20 rounded-xl bg-transparent flex items-center justify-center overflow-hidden">
                 <img 
                   src={logo} 
                   alt="Casa Terminal Logo" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
+                  style={{ mixBlendMode: 'multiply' }}
                   onError={(e) => {
-                    // Fallback if image doesn't load
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
                     const parent = target.parentElement;
                     if (parent) {
                       const fallback = document.createElement('span');
-                      fallback.className = 'text-[#502d13] font-display font-bold text-xl';
+                      fallback.className = 'text-[#e9ddc8] font-display font-bold text-xl';
                       fallback.textContent = 'CT';
                       parent.appendChild(fallback);
                     }
@@ -339,7 +335,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar */}
+      {/* Bottom Bar - Removed Sitemap */}
       <div className="border-t border-[#e9ddc8]/10 relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-5">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-center sm:text-left">
@@ -347,7 +343,7 @@ const Footer = () => {
               © {new Date().getFullYear()} CASA TERMINAL. All rights reserved.
             </p>
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6 order-1 sm:order-2">
-              {["Privacy", "Terms", "Sitemap"].map((link) => (
+              {["Privacy", "Terms"].map((link) => (
                 <a
                   key={link}
                   href="#"

@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, ArrowRight, Star, Clock, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight, Star, Clock, MapPin, Package, HardHat, Wrench, Sparkles } from "lucide-react";
 
 const services = [
   {
@@ -92,10 +92,6 @@ const ServiceCarousel = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   const isMobile = windowWidth < 640;
-  const isTablet = windowWidth >= 640 && windowWidth < 1024;
-
-  // Minimum touch target size for mobile
-  const minTouchSize = isMobile ? 44 : 40;
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -108,7 +104,6 @@ const ServiceCarousel = () => {
         behavior: "smooth",
       });
 
-      // Update current index
       const newIndex = direction === "left" 
         ? Math.max(0, currentIndex - 1)
         : Math.min(services.length - 1, currentIndex + 1);
@@ -116,7 +111,6 @@ const ServiceCarousel = () => {
     }
   };
 
-  // Touch handlers for mobile swipe
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
   };
@@ -142,7 +136,6 @@ const ServiceCarousel = () => {
     setTouchEnd(null);
   };
 
-  // Handle dot navigation
   const scrollToIndex = (index: number) => {
     if (scrollRef.current) {
       const cardWidth = isMobile ? 280 : 320;
@@ -155,7 +148,6 @@ const ServiceCarousel = () => {
     }
   };
 
-  // Update current index on scroll
   const handleScroll = () => {
     if (scrollRef.current) {
       const scrollLeft = scrollRef.current.scrollLeft;
@@ -179,6 +171,51 @@ const ServiceCarousel = () => {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* "Everything Under One Roof" Section - Added */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12 md:mb-16"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={isInView ? { scale: 1 } : {}}
+            transition={{ type: "spring", delay: 0.2 }}
+            className="inline-flex items-center gap-2 bg-[#502d13] text-[#e9ddc8] px-3 md:px-4 py-1.5 md:py-2 rounded-full mb-3 md:mb-4"
+          >
+            <Sparkles className="w-3 h-3 md:w-4 md:h-4" />
+            <span className="text-xs md:text-sm font-semibold">Complete Solutions</span>
+          </motion.div>
+          
+          <h2 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl text-[#502d13] mt-2 md:mt-3 px-4">
+            Everything Under One Roof
+          </h2>
+          <p className="text-[#502d13]/60 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mt-2 md:mt-4 px-4">
+            From premium materials to expert contractors — all your construction needs in one place
+          </p>
+
+          {/* Service Categories */}
+          <div className="flex flex-wrap justify-center gap-3 md:gap-4 mt-6 md:mt-8">
+            {[
+              { icon: Package, label: "Products" },
+              { icon: Wrench, label: "Rental" },
+              { icon: HardHat, label: "Contractors" },
+            ].map((item, index) => (
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.3 + index * 0.1 }}
+                className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md"
+              >
+                <item.icon className="w-4 h-4 text-[#502d13]" />
+                <span className="text-sm font-medium text-[#502d13]">{item.label}</span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -195,7 +232,7 @@ const ServiceCarousel = () => {
             </p>
           </div>
           
-          {/* Navigation Buttons - Hidden on Mobile */}
+          {/* Navigation Buttons */}
           <div className="hidden md:flex gap-3 mt-4 sm:mt-0">
             <motion.button
               whileHover={{ scale: 1.1 }}
@@ -222,7 +259,7 @@ const ServiceCarousel = () => {
 
         {/* Carousel Container */}
         <div className="relative">
-          {/* Gradient Overlays for Visual Effect */}
+          {/* Gradient Overlays */}
           <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-20 bg-gradient-to-r from-[#e9ddc8] to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-20 bg-gradient-to-l from-[#e9ddc8] to-transparent z-10 pointer-events-none" />
 
@@ -343,7 +380,6 @@ const ServiceCarousel = () => {
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
-                        // Handle booking
                         console.log('Book:', service.title);
                       }}
                     >
@@ -356,8 +392,8 @@ const ServiceCarousel = () => {
             ))}
           </div>
 
-          {/* Pagination Dots - Mobile & Tablet */}
-          <div className="flex justify-center gap-2 mt-4 sm:mt-6 md:hidden">
+          {/* Pagination Dots */}
+          <div className="flex justify-center gap-2 mt-4 sm:mt-6">
             {services.map((_, i) => (
               <button
                 key={i}
@@ -373,12 +409,12 @@ const ServiceCarousel = () => {
           </div>
         </div>
 
-        {/* View All Link - Desktop */}
+        {/* View All Link */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.5, delay: 0.8 }}
-          className="hidden md:flex justify-center mt-8 lg:mt-10"
+          className="flex justify-center mt-8 lg:mt-10"
         >
           <a
             href="#all-services"
@@ -389,18 +425,6 @@ const ServiceCarousel = () => {
           </a>
         </motion.div>
       </div>
-
-      {/* Quick Stats - Mobile Only */}
-      {isMobile && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="container mx-auto px-4 mt-8"
-        >
-         
-        </motion.div>
-      )}
     </motion.section>
   );
 };

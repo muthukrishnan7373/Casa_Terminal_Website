@@ -1,19 +1,29 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-// Remove this incorrect import
-import logo from "@/assets/Logo.jpg";
+import logo from "@/assets/logo.svg"; // Ensure this path is correct
 import {
   Menu,
   X,
   ChevronDown,
   Search,
   User,
-  ShoppingBag,
-  Phone,
-  Mail,
 } from "lucide-react";
 
-const navLinks = [
+// Define types for the navigation structure
+interface MegaMenuColumn {
+  title: string;
+  links: string[];
+}
+
+interface NavLink {
+  label: string;
+  href: string;
+  megaMenu?: {
+    columns: MegaMenuColumn[];
+  };
+}
+
+const navLinks: NavLink[] = [
   { label: "Home", href: "/" },
   {
     label: "Services",
@@ -53,8 +63,6 @@ const navLinks = [
       ],
     },
   },
-  { label: "Projects", href: "#projects" },
-  { label: "Members", href: "#members" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -124,50 +132,44 @@ const Navbar = () => {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
             ? "bg-[#502d13] backdrop-blur-lg shadow-2xl py-2"
-            : "bg-[#502d13] py-3 lg:py-4"
+            : "bg-[#502d13] py-2 lg:py-2"
         }`}
       >
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-2">
           <div className="flex items-center justify-between">
-            {/* Logo - fixed version */}
+            {/* Logo */}
             <motion.a
-              href={logo}
-              className="flex items-center gap-2 md:gap-3 group"
+              href="/"
+              className="flex items-center  group "
               whileHover={{ scale: windowWidth >= 768 ? 1.05 : 1 }}
               whileTap={{ scale: 0.95 }}
             >
               <div className="relative">
-                {/* FIXED: Correct way to display logo */}
-                <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-[#e9ddc8] flex items-center justify-center shadow-lg overflow-hidden">
+                {/* REQUIREMENT: Remove white background (bg-transparent) */}
+                <div className="w-16 h-16 md:w-16 md:h-16 rounded-xl bg-transparent flex items-center justify-center overflow-hidden">
                   <img 
                     src={logo}
                     alt="Casa Terminal Logo" 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     onError={(e) => {
-                      // Fallback if image doesn't load
+                      // FIX: Type casting for TypeScript
                       const target = e.target as HTMLImageElement;
                       target.style.display = 'none';
                       const parent = target.parentElement;
                       if (parent) {
                         const fallback = document.createElement('span');
-                        fallback.className = 'text-[#502d13] font-display font-bold text-lg';
+                        fallback.className = 'text-[#e9ddc8] font-display font-bold text-lg';
                         fallback.textContent = 'CT';
                         parent.appendChild(fallback);
                       }
                     }}
                   />
                 </div>
-                <motion.div
-                  className="absolute inset-0 rounded-xl border-2 border-[#e9ddc8]"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileHover={{ opacity: 1, scale: 1.1 }}
-                  transition={{ duration: 0.3 }}
-                />
               </div>
 
               {/* Text logo */}
               <div className="flex flex-col">
-                <span className="text-[#e9ddc8] font-display font-bold text-lg md:text-2xl lg:text-3xl leading-tight">
+                <span className="text-[#f8e3be] font-display font-bold text-lg md:text-2xl lg:text-3xl leading-tight">
                   CASA TERMINAL
                 </span>
               </div>
@@ -192,7 +194,7 @@ const Navbar = () => {
                 >
                   <motion.a
                     href={link.href}
-                    className="px-3 xl:px-4 py-2 text-[#e9ddc8]/80 hover:text-[#e9ddc8] font-medium text-sm xl:text-base tracking-wide rounded-lg transition-colors relative group inline-flex items-center gap-1"
+                    className="px-1 xl:px-12 py-1 text-[#e9ddc8]/80 hover:text-[#e9ddc8] font-medium text-sm xl:text-base tracking-wide rounded-lg transition-colors relative group inline-flex items-center gap-1"
                     whileHover={{ y: -2 }}
                   >
                     {link.label}
@@ -246,7 +248,7 @@ const Navbar = () => {
               ))}
             </div>
 
-            {/* Action Icons */}
+            {/* Action Icons & Button */}
             <div className="flex items-center gap-1 md:gap-2">
               <motion.button
                 whileHover={{ scale: 1.1 }}
@@ -268,26 +270,16 @@ const Navbar = () => {
                 <User className="w-4 h-4 md:w-5 md:h-5" />
               </motion.a>
 
-              <motion.a
-                href="#"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-2 rounded-lg text-[#e9ddc8] hover:bg-[#e9ddc8]/10 transition-colors relative"
-                aria-label="Shopping cart"
-              >
-                <ShoppingBag className="w-4 h-4 md:w-5 md:h-5" />
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#e9ddc8] text-[#502d13] text-xs rounded-full flex items-center justify-center font-bold">
-                  3
-                </span>
-              </motion.a>
+              {/* REQUIREMENT: Removed Cart Icon */}
 
+              {/* REQUIREMENT: Replaced Get Quote with Become a Member */}
               <motion.a
-                href="#quote"
+                href="#register"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="hidden md:block ml-2 bg-[#e9ddc8] text-[#502d13] px-4 md:px-6 py-2 md:py-2.5 rounded-xl font-semibold text-xs md:text-sm hover:shadow-xl hover:shadow-[#e9ddc8]/20 transition-all duration-300 whitespace-nowrap"
               >
-                Get Quote
+                Become a Member
               </motion.a>
 
               <button
@@ -313,7 +305,7 @@ const Navbar = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: "100%" }}
               transition={{ type: "tween", duration: 0.3 }}
-              className="fixed inset-0 top-[72px] lg:hidden bg-[#502d13] z-40 overflow-y-auto"
+              className="fixed inset-0 top-[80px] lg:hidden bg-[#502d13] z-40 overflow-y-auto"
             >
               <div className="container mx-auto px-4 py-6">
                 <div className="flex flex-col gap-2">
@@ -388,11 +380,11 @@ const Navbar = () => {
                   {/* Mobile action buttons */}
                   <div className="mt-6 grid grid-cols-2 gap-3">
                     <a
-                      href="#quote"
+                      href="#register"
                       className="bg-[#e9ddc8] text-[#502d13] px-6 py-3 rounded-xl font-semibold text-center hover:bg-[#d4c4a8] transition-colors"
                       onClick={() => setIsOpen(false)}
                     >
-                      Get Quote
+                      Become a Member
                     </a>
                     <a
                       href="#"
@@ -442,32 +434,6 @@ const Navbar = () => {
                   >
                     Cancel
                   </button>
-                </div>
-
-                <div className="hidden sm:block px-4 pb-4">
-                  <p className="text-[#502d13]/50 text-xs mb-2">
-                    Popular searches:
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {[
-                      "Cement",
-                      "JCB",
-                      "TMT Steel",
-                      "Contractors",
-                      "Scaffolding",
-                    ].map((item) => (
-                      <button
-                        key={item}
-                        className="px-3 py-1 bg-[#502d13]/10 text-[#502d13] text-xs rounded-full hover:bg-[#502d13]/20 transition-colors"
-                        onClick={() => {
-                          console.log("Search:", item);
-                          setShowSearch(false);
-                        }}
-                      >
-                        {item}
-                      </button>
-                    ))}
-                  </div>
                 </div>
               </div>
             </motion.div>
