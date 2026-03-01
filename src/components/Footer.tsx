@@ -12,30 +12,17 @@ const Footer = () => {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 500);
-    };
+    const handleScroll = () => setShowScrollTop(window.scrollY > 500);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const toggleSection = (section: string) => {
-    setExpandedSection(expandedSection === section ? null : section);
-  };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+  const toggleSection = (section: string) => setExpandedSection(expandedSection === section ? null : section);
 
   const footerSections = [
-    {
-      title: "Quick Links",
-      links: ["About Us", "Services", "Vendors", "Careers"]
-    },
-    {
-      title: "Support",
-      links: ["Help Center", "FAQs", "Terms of Service", "Privacy Policy", "Contact Us"]
-    }
+    { title: "Quick Links", links: ["About Us", "Services", "Vendors", "Careers"] },
+    { title: "Support", links: ["Help Center", "FAQs", "Terms of Service", "Privacy Policy", "Contact Us"] }
   ];
 
   const socialLinks = [
@@ -64,19 +51,18 @@ const Footer = () => {
         />
       </div>
 
-      
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16 relative z-10">
-        {/* Mobile: Accordion Layout */}
-        <div className="lg:hidden space-y-4">
+        {/* Mobile: Accordion Layout (up to lg) */}
+        <div className="lg:hidden space-y-6">
           {/* Company Info - Mobile */}
-          <div className="relative">
-            <div className=" gap-1 ">
-              <div className="w-16 h-16 md:w-16 md:h-16 rounded-xl bg-transparent flex items-center justify-center overflow-hidden">
+          <div className="text-center sm:text-left">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 mb-4">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-transparent flex items-center justify-center overflow-hidden">
                 <img 
                   src={logo} 
                   alt="Casa Terminal Logo" 
-                  
+                  className="w-full h-full object-contain"
                   style={{ mixBlendMode: 'multiply' }}
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
@@ -91,21 +77,23 @@ const Footer = () => {
                   }}
                 />
               </div>
-              <span className="font-display font-bold text-xl text-[#e9ddc8]">CASA TERMINAL</span>
+              <span className="font-display font-bold text-xl sm:text-2xl text-[#e9ddc8]">
+                CASA TERMINAL
+              </span>
             </div>
-            <p className="text-[#e9ddc8]/60 text-sm mb-6 leading-relaxed">
+            <p className="text-[#e9ddc8]/60 text-sm sm:text-base max-w-md mx-auto sm:mx-0 mb-6 leading-relaxed">
               India's premier construction marketplace connecting builders, suppliers, and contractors.
             </p>
             
-            {/* Social Links */}
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            {/* Social Links - center on small screens */}
+            <div className="flex justify-center sm:justify-start gap-3 flex-wrap pb-2">
               {socialLinks.map(({ Icon, href, label }) => (
                 <motion.a
                   key={label}
                   href={href}
                   whileHover={{ y: -3 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-10 h-10 rounded-lg bg-[#e9ddc8]/10 flex items-center justify-center hover:bg-[#e9ddc8] hover:text-[#502d13] transition-all duration-300 flex-shrink-0"
+                  className="w-10 h-10 rounded-lg bg-[#e9ddc8]/10 flex items-center justify-center hover:bg-[#e9ddc8] hover:text-[#502d13] transition-all duration-300"
                   aria-label={label}
                 >
                   <Icon className="w-4 h-4" />
@@ -115,60 +103,64 @@ const Footer = () => {
           </div>
 
           {/* Accordion Sections */}
-          {footerSections.map((section) => (
-            <div key={section.title} className="border border-[#e9ddc8]/10 rounded-lg overflow-hidden">
-              <button
-                onClick={() => toggleSection(section.title)}
-                className="w-full flex items-center justify-between p-4 text-left bg-[#e9ddc8]/5 hover:bg-[#e9ddc8]/10 transition-colors"
-              >
-                <span className="font-display font-bold text-base">{section.title}</span>
-                <ChevronRight 
-                  className={`w-5 h-5 transition-transform duration-300 ${
-                    expandedSection === section.title ? 'rotate-90' : ''
-                  }`} 
-                />
-              </button>
-              
-              <motion.div
-                initial={false}
-                animate={{ 
-                  height: expandedSection === section.title ? 'auto' : 0,
-                  opacity: expandedSection === section.title ? 1 : 0
-                }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
-              >
-                <ul className="p-4 space-y-3 bg-[#e9ddc8]/5">
-                  {section.links.map((link) => (
-                    <li key={link}>
-                      <a 
-                        href="#" 
-                        className="text-[#e9ddc8]/60 hover:text-[#e9ddc8] transition-colors flex items-center gap-2 text-sm"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        <span className="w-1 h-1 bg-[#e9ddc8]/40 rounded-full" />
-                        {link}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            </div>
-          ))}
+          <div className="space-y-3">
+            {footerSections.map((section) => (
+              <div key={section.title} className="border border-[#e9ddc8]/10 rounded-lg overflow-hidden">
+                <button
+                  onClick={() => toggleSection(section.title)}
+                  className="w-full flex items-center justify-between p-4 text-left bg-[#e9ddc8]/5 hover:bg-[#e9ddc8]/10 transition-colors"
+                >
+                  <span className="font-display font-bold text-base sm:text-lg">{section.title}</span>
+                  <ChevronRight 
+                    className={`w-5 h-5 transition-transform duration-300 ${
+                      expandedSection === section.title ? 'rotate-90' : ''
+                    }`} 
+                  />
+                </button>
+                
+                <motion.div
+                  initial={false}
+                  animate={{ 
+                    height: expandedSection === section.title ? 'auto' : 0,
+                    opacity: expandedSection === section.title ? 1 : 0
+                  }}
+                  transition={{ duration: 0.3 }}
+                  className="overflow-hidden"
+                >
+                  <ul className="p-4 space-y-3 bg-[#e9ddc8]/5">
+                    {section.links.map((link) => (
+                      <li key={link}>
+                        <a 
+                          href="#" 
+                          className="text-[#e9ddc8]/60 hover:text-[#e9ddc8] transition-colors flex items-center gap-2 text-sm sm:text-base"
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          <span className="w-1 h-1 bg-[#e9ddc8]/40 rounded-full" />
+                          {link}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </div>
+            ))}
+          </div>
 
-          {/* Contact Info */}
+          {/* Contact Info - Mobile */}
           <div className="mt-6 p-4 bg-[#e9ddc8]/5 rounded-lg">
-            <h4 className="font-display font-bold text-base mb-4">Get in Touch</h4>
+            <h4 className="font-display font-bold text-base sm:text-lg mb-4 text-center sm:text-left">
+              Get in Touch
+            </h4>
             <div className="space-y-3 text-[#e9ddc8]/60">
               {contactInfo.map(({ Icon, text, href }) => (
-                <div key={text} className="flex items-center gap-3">
+                <div key={text} className="flex items-center justify-center sm:justify-start gap-3">
                   <Icon className="w-4 h-4 text-[#e9ddc8] flex-shrink-0" />
                   {href ? (
-                    <a href={href} className="text-sm hover:text-[#e9ddc8] transition-colors">
+                    <a href={href} className="text-sm sm:text-base hover:text-[#e9ddc8] transition-colors">
                       {text}
                     </a>
                   ) : (
-                    <span className="text-sm">{text}</span>
+                    <span className="text-sm sm:text-base">{text}</span>
                   )}
                 </div>
               ))}
@@ -176,12 +168,12 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Desktop Grid Layout */}
-        <div className="hidden lg:grid lg:grid-cols-4 gap-8 xl:gap-10">
-          {/* Company Info - Desktop */}
-          <div>
-            <div className="flex items-center  mb-6">
-              <div className="w-20 h-20 rounded-xl bg-transparent flex items-center justify-center overflow-hidden">
+        {/* Desktop Grid Layout (lg and above) */}
+        <div className="hidden lg:grid lg:grid-cols-4 gap-8 xl:gap-12">
+          {/* Company Info */}
+          <div className="col-span-1">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-16 h-16 rounded-xl bg-transparent flex items-center justify-center overflow-hidden">
                 <img 
                   src={logo} 
                   alt="Casa Terminal Logo" 
@@ -202,11 +194,9 @@ const Footer = () => {
               </div>
               <span className="font-display font-bold text-xl text-[#e9ddc8]">CASA TERMINAL</span>
             </div>
-            <p className="text-[#e9ddc8]/60 text-sm mb-6 leading-relaxed">
+            <p className="text-[#e9ddc8]/60 text-sm leading-relaxed mb-6">
               India's premier construction marketplace connecting builders, suppliers, and contractors with cutting-edge technology and trusted partnerships.
             </p>
-            
-            {/* Social Links */}
             <div className="flex gap-3">
               {socialLinks.map(({ Icon, href, label }) => (
                 <motion.a
@@ -234,7 +224,7 @@ const Footer = () => {
                 <li key={link}>
                   <a 
                     href="#" 
-                    className="text-[#e9ddc8]/60 hover:text-[#e9ddc8] transition-colors flex items-center gap-2 group"
+                    className="text-[#e9ddc8]/60 hover:text-[#e9ddc8] transition-colors flex items-center gap-2 group text-sm"
                     onClick={(e) => e.preventDefault()}
                   >
                     <span className="w-1 h-1 bg-[#e9ddc8]/40 rounded-full group-hover:bg-[#e9ddc8] transition-colors" />
@@ -256,7 +246,7 @@ const Footer = () => {
                 <li key={link}>
                   <a 
                     href="#" 
-                    className="text-[#e9ddc8]/60 hover:text-[#e9ddc8] transition-colors flex items-center gap-2 group"
+                    className="text-[#e9ddc8]/60 hover:text-[#e9ddc8] transition-colors flex items-center gap-2 group text-sm"
                     onClick={(e) => e.preventDefault()}
                   >
                     <span className="w-1 h-1 bg-[#e9ddc8]/40 rounded-full group-hover:bg-[#e9ddc8] transition-colors" />
@@ -291,7 +281,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Bar - Removed Sitemap */}
+      {/* Bottom Bar */}
       <div className="border-t border-[#e9ddc8]/10 relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-5">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-center sm:text-left">
@@ -317,10 +307,7 @@ const Footer = () => {
       {/* Scroll to Top Button */}
       <motion.button
         initial={{ scale: 0, opacity: 0 }}
-        animate={{ 
-          scale: showScrollTop ? 1 : 0,
-          opacity: showScrollTop ? 1 : 0
-        }}
+        animate={{ scale: showScrollTop ? 1 : 0, opacity: showScrollTop ? 1 : 0 }}
         transition={{ duration: 0.2 }}
         onClick={scrollToTop}
         className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 bg-[#e9ddc8] text-[#502d13] p-3 md:p-4 rounded-full shadow-2xl hover:shadow-[#e9ddc8]/30 transition-all duration-300 group"
@@ -348,7 +335,7 @@ const Footer = () => {
         ))}
       </div>
 
-      {/* Add bottom padding on mobile */}
+      {/* Add bottom padding on mobile to account for fixed nav */}
       <style>{`
         @media (max-width: 768px) {
           body {
